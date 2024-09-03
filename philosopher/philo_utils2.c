@@ -6,16 +6,31 @@
 /*   By: bbadda <bbadda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 09:45:09 by bbadda            #+#    #+#             */
-/*   Updated: 2024/08/03 20:07:23 by bbadda           ###   ########.fr       */
+/*   Updated: 2024/09/03 13:34:11 by bbadda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	mutex_print(t_philo *philo, char *message)
+void	my_own_sleep(long time)
 {
-	pthread_mutex_lock(&philo->info->finish_lock);
-	if (!philo->info->finished)
-		printf("%lu %d %s\n", get_msec_time() - philo->info->start_time, philo->ID + 1, message);
-	pthread_mutex_unlock(&philo->info->finish_lock);
+	long	start_time;
+
+	start_time = get_msec_time();
+	while (1)
+	{
+		if (get_msec_time() - start_time > time)
+			break ;
+		usleep(150);
+	}
+}
+
+long	get_msec_time(void)
+{
+	struct timeval	time;
+	long			msec_time;
+
+	gettimeofday(&time, NULL);
+	msec_time = (time.tv_sec * 1000) + (time.tv_usec / 1000); 
+	return (msec_time);
 }

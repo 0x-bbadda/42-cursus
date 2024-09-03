@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   init_data.c                                        :+:      :+:    :+:   */
+/*   init_things.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bbadda <bbadda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 09:47:24 by bbadda            #+#    #+#             */
-/*   Updated: 2024/08/02 22:51:33 by bbadda           ###   ########.fr       */
+/*   Updated: 2024/09/03 13:28:25 by bbadda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,19 +26,9 @@ void	__init_args(t_philoinfo *info, char **av, int ac)
 
 void	init_all_philos(t_philoinfo *info, int i)
 {
-	info->philo[i].ID = i;
+	info->philo[i].id = i;
 	info->philo[i].info = info;
 	info->philo[i].last_meal_time = info->start_time;
 	info->philo[i].should_die = false;
 	info->philo[i].ate = 0;
-}
-
-void	__creat_mutex(t_philoinfo *info)
-{
-	int	i;
-
-	i = -1;
-	pthread_mutex_init(&info->finish_lock, NULL);
-	while(++i < info->number_of_philos)
-		pthread_mutex_init(&info->forks[i], NULL);
 }

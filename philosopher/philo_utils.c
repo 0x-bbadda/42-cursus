@@ -6,13 +6,13 @@
 /*   By: bbadda <bbadda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 13:06:33 by bbadda            #+#    #+#             */
-/*   Updated: 2024/08/02 00:23:27 by bbadda           ###   ########.fr       */
+/*   Updated: 2024/09/03 13:17:26 by bbadda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-static	int	__strlen(const char *str)
+int	__strlen(const char *str)
 {
 	int	i;
 
@@ -20,41 +20,6 @@ static	int	__strlen(const char *str)
 	while (str[i])
 		i++;
 	return (i);
-}
-
-static int	print_err(char *err)
-{
-	write(STDERR_FILENO, err, __strlen(err));
-	return (1);
-}
-
-int	__check_info(t_philoinfo info, int ac)
-{
-	if (ac == 6 && info.n_time_should_eat <= 0)
-		return (print_err("ERROR: wrong num of must eat\n"));
-	if (info.number_of_philos < 0)
-		return (print_err("ERROR: wrong num of philo\n"));
-	if (info.time_to_die < 60)
-		return (print_err("ERROR: wrong time to die\n"));
-	if (info.time_to_eat < 60)
-		return (print_err("ERROR: wrong time to eat\n"));
-	if (info.time_to_sleep < 60)
-		return (print_err("ERROR: wrong time to sleep\n"));
-	return (0);
-}
-
-void	__error(int index)
-{
-	if (index == 0)
-	{
-		printf("Number of elementes incorrect !\n");
-		exit(0);
-	}
-	if (index == 1)
-	{
-		printf("The Arguments contains only numbers !\n");
-		exit(0);
-	}
 }
 
 static void	__bzero(void *s, size_t n)
@@ -101,14 +66,4 @@ int	ft_atoi(const char *str)
 		str++;
 	}
 	return (r * s);
-}
-
-long	get_msec_time(void)
-{
-	struct	timeval time;
-	long	msec_time;
-
-	gettimeofday(&time, NULL);
-	msec_time = (time.tv_sec * 1000) + (time.tv_usec / 1000); 
-	return msec_time;
 }
