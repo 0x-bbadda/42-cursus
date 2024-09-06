@@ -14,7 +14,7 @@
 
 void	__create_threads_and_philos(t_philoinfo *info)
 {
-	pthread_t	monitor_thread;
+
 	int			i;
 
 	i = 0;
@@ -22,8 +22,8 @@ void	__create_threads_and_philos(t_philoinfo *info)
 	while (i < info->number_of_philos)
 	{
 		init_all_philos(info, i);
-		pthread_create(&info->philo[i].thread, NULL, 
-						ft_routine, &info->philo[i]);
+		pthread_create(&info->philo[i].thread, NULL, ft_routine, 
+			&info->philo[i]);
 		i++;
 		usleep(100);
 	}
@@ -34,8 +34,9 @@ void	__creat_mutex(t_philoinfo *info)
 	int	i;
 
 	i = -1;
+	pthread_mutex_init(&info->is_die_m, NULL);
 	pthread_mutex_init(&info->print_m, NULL);
-	pthread_mutex_init(&info->eat_m, NULL);
+	pthread_mutex_init(&info->all_ate_m, NULL);
 	pthread_mutex_init(&info->should_die_m, NULL);
 	pthread_mutex_init(&info->finished_m, NULL);
 	pthread_mutex_init(&info->last_meal_m, NULL);

@@ -31,6 +31,7 @@ typedef struct s_philo
 	size_t		should_die;
 	size_t		last_meal_time;
 	pthread_t	thread;
+	pthread_mutex_t	ate_m;
 	t_philoinfo	*info;
 }t_philo;
 
@@ -44,14 +45,15 @@ typedef struct s_philoinfo
 	int				finished;
 	bool 			is_die;
 	size_t			start_time;
-	int				eat;
+	int				all_ate;
 	t_philo			*philo;
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	print_m;
+	pthread_mutex_t	is_die_m;
 	pthread_mutex_t	should_die_m;
 	pthread_mutex_t	finished_m;
 	pthread_mutex_t	last_meal_m;
-	pthread_mutex_t	eat_m;
+	pthread_mutex_t	all_ate_m;
 }t_philoinfo;
 
 //-----------------------check/create/init_things----------------------//
@@ -61,8 +63,9 @@ void			__creat_mutex(t_philoinfo *ph);
 void			__create_threads_and_philos(t_philoinfo *info);
 int				check_death_status(t_philo *each_philo);
 int				check_finished_status(t_philo *each_philo);
+int				check_death_and_hunger_status(t_philo *each_philo);
 size_t			check_last_meal_status(t_philo *each_philo);
-void			*__check_death(void *arg);
+void			*__check_death_and_hunger(void *arg);
 void			*__check_hunger(void *arg);
 //----------------------------utils_functions--------------------------//
 int				__strlen(const char *str);

@@ -50,12 +50,13 @@ int	__check_info(t_philoinfo info, int ac)
 void	mutex_print(t_philo *philo, char *message)
 {
 	pthread_mutex_lock(&philo->info->finished_m);
-	if (!philo->info->finished)
+	if (!philo->info->is_die)
 	{
 		pthread_mutex_lock(&philo->info->print_m);
 		printf("%lu %d %s\n", get_msec_time() - philo->info->start_time, 
-			philo->id + 1, message);
-		pthread_mutex_unlock(&philo->info->print_m);
+			philo->id, message);
+		if (strcmp(message, "died") != 0)
+			pthread_mutex_unlock(&philo->info->print_m);
 		pthread_mutex_unlock(&philo->info->finished_m);
 	}
 	else

@@ -26,9 +26,11 @@ void	__init_args(t_philoinfo *info, char **av, int ac)
 
 void	init_all_philos(t_philoinfo *info, int i)
 {
-	info->philo[i].id = i;
+	info->philo[i].id = i + 1;
 	info->philo[i].info = info;
 	info->philo[i].last_meal_time = info->start_time;
 	info->philo[i].should_die = false;
 	info->philo[i].ate = 0;
+	pthread_mutex_init(&info->philo[i].ate_m, NULL);
+
 }

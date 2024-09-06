@@ -1,6 +1,7 @@
 CC = gcc
 
-CFLAGS = -Wall -Werror -Wextra
+CFLAGS = -Wall -Werror -Wextra 
+# -fsanitize=address -g
 
 NAME = philo
 
@@ -17,7 +18,7 @@ OBJS = $(SRCS: .c = .o )
 all : $(NAME)
 
 $(NAME) : $(SRCS)
-	$(CC) $(OBJS)  -o  $(NAME)
+	$(CC) $(OBJS) $(CFLAGS)  -o  $(NAME)
 
 %.o:%.c philo.h
 	$(CC) $(CFLAGS) -c $< -o $@

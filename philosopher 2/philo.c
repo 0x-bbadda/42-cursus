@@ -52,11 +52,11 @@ int	main(int ac, char *av[])
 		return (1);
 	info->finished = false;
 	info->is_die =false;
-	info->eat = 0;
+	info->all_ate = 0;
 	__creat_mutex(info);
 	__create_threads_and_philos(info);
 	while (!info->is_die)
-		__check_death(info);
+		__check_death_and_hunger(info);
 	__join_and_free(info);
 	return (0);
 }
