@@ -6,7 +6,7 @@
 /*   By: bbadda <bbadda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 09:47:24 by bbadda            #+#    #+#             */
-/*   Updated: 2024/09/06 23:42:23 by bbadda           ###   ########.fr       */
+/*   Updated: 2024/09/07 12:26:08 by bbadda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,9 @@ void	__init_args(t_philoinfo *info, char **av, int ac)
 void	init_all_philos(t_philoinfo *info, int i)
 {
 	info->philo[i].id = i + 1;
+	info->philo[i].right_fork = i;
+	if (info->number_of_philos != 1)
+		info->philo[i].left_fork = (i + 1) % info->number_of_philos; 
 	info->philo[i].info = info;
 	info->philo[i].last_meal_time = info->start_time;
 	info->philo[i].should_die = false;

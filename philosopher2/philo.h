@@ -6,7 +6,7 @@
 /*   By: bbadda <bbadda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/26 12:16:13 by bbadda            #+#    #+#             */
-/*   Updated: 2024/09/06 23:42:05 by bbadda           ###   ########.fr       */
+/*   Updated: 2024/09/07 12:42:06 by bbadda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ typedef struct s_philo
 	int				ate;
 	size_t			should_die;
 	size_t			last_meal_time;
+	int				right_fork;
+	int				left_fork;
 	pthread_t		thread;
 	pthread_mutex_t	ate_m;
 	t_philoinfo		*info;
@@ -53,6 +55,7 @@ typedef struct s_philoinfo
 	pthread_mutex_t	should_die_m;
 	pthread_mutex_t	finished_m;
 	pthread_mutex_t	last_meal_m;
+	pthread_mutex_t	sleep_m;
 	pthread_mutex_t	all_ate_m;
 }t_philoinfo;
 
@@ -66,19 +69,19 @@ int				check_finished_status(t_philo *each_philo);
 int				check_death_and_hunger_status(t_philo *each_philo);
 size_t			check_last_meal_status(t_philo *each_philo);
 void			*__check_death_and_hunger(void *arg);
-void			*__check_hunger(void *arg);
 //----------------------------utils_functions--------------------------//
 int				__strlen(const char *str);
 void			*__calloc(size_t count, size_t size);
 int				ft_atoi(const char *str);
-void			my_own_sleep(long time);
+int				cmp(const char *s1, const char *s2);
+void			my_own_sleep(t_philo *philo, long time);
 long			get_msec_time(void);
 // void			*__is_died(void *philo);
 long			get_msec_time(void);
 //---------------------------routine_and_print--------------------------//
 void			*ft_routine(void *philos);
 void			eating(t_philo *each_philo);
-void			sleep_and_then_think(t_philo *philo);
+void			sleep_time(t_philo *philo);
 void			__error(int index);
 int				__check_info(t_philoinfo info, int ac);
 void			mutex_print(t_philo *philo, char *message);

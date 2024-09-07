@@ -6,50 +6,70 @@
 /*   By: bbadda <bbadda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 23:59:43 by bbadda            #+#    #+#             */
-/*   Updated: 2024/09/06 23:44:02 by bbadda           ###   ########.fr       */
+/*   Updated: 2024/09/07 12:34:33 by bbadda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	check_death_status(t_philo *each_philo)
+static void	__check_hunger(void *arg)
 {
-	int	status;
+	t_philoinfo	*info;
 
-	pthread_mutex_lock(&each_philo->info->should_die_m);
-	status = each_philo->should_die;
-	pthread_mutex_unlock(&each_philo->info->should_die_m);
-	return (status);
+	info = arg;
+	if (info->n_time_should_eat > 0 && !info->is_die)
+	{
+		if (info->all_ate == info->number_of_philos)
+		{
+			pthread_mutex_lock(&info->finished_m);
+			info->finished = true;
+			pthread_mutex_unlock(&info->finished_m);
+		}
+	}
 }
 
-int	check_finished_status(t_philo *each_philo)
+static void	__check_death(void *arg)
 {
-	int	status;
+	t_philo		*philo;
+	int			i;
 
-	pthread_mutex_lock(&each_philo->info->finished_m);
-	status = each_philo->info->finished;
-	pthread_mutex_unlock(&each_philo->info->finished_m);
-	return (status);
+	philo = arg;
+	i = 0;
+	if (philo->info->time_to_die < get_msec_time() - 
+		(long)check_last_meal_status(philo) && !philo->info->is_die)
+	{
+		pthread_mutex_lock(&philo->info->should_die_m);
+		philo->should_die = true;
+		pthread_mutex_unlock(&philo->info->should_die_m);
+	}
 }
 
-int	check_death_and_hunger_status(t_philo *each_philo)
+static int	helper_function(t_philoinfo *info)
 {
-	int	status;
+	int	i;
 
-	pthread_mutex_lock(&each_philo->info->is_die_m);
-	status = each_philo->info->is_die;
-	pthread_mutex_unlock(&each_philo->info->is_die_m);
-	return (status);
-}
-
-size_t	check_last_meal_status(t_philo *each_philo)
-{
-	size_t	last_meal;
-
-	pthread_mutex_lock(&each_philo->info->last_meal_m);
-	last_meal = each_philo->last_meal_time;
-	pthread_mutex_unlock(&each_philo->info->last_meal_m);
-	return (last_meal);
+	i = 0;
+	while (i < info->number_of_philos)
+	{
+		__check_hunger(info);
+		__check_death(&info->philo[i]);
+		if (info->philo[i].should_die || info->finished)
+		{
+			pthread_mutex_lock(&info->is_die_m);
+			info->is_die = true;
+			pthread_mutex_unlock(&info->is_die_m);
+			if (info->philo[i].should_die)
+			{
+				pthread_mutex_lock(&(info->philo[i].info->print_m));
+				printf("\033[0;31m%lu %d died\n", get_msec_time() - 
+					info->philo[i].info->start_time, info->philo[i].id);
+				pthread_mutex_unlock(&info->philo[i].info->print_m);
+			}
+			return (1);
+		}
+		i++;
+	}
+	return (0);
 }
 
 void	*__check_death_and_hunger(void *arg)
@@ -61,53 +81,10 @@ void	*__check_death_and_hunger(void *arg)
 	i = 0;
 	d = 0;
 	info = (t_philoinfo *)arg;
-	while (i++ < info->number_of_philos)
+	while (!d)
 	{
-		while (!d)
-		{
-			if (info->n_time_should_eat > 0 && !info->is_die)
-			{
-				if (info->all_ate == info->number_of_philos)
-				{
-					pthread_mutex_lock(&info->finished_m);
-					info->finished = true;
-					pthread_mutex_unlock(&info->finished_m);
-				}
-			}
-			if (info->time_to_die < get_msec_time() - 
-				(long)check_last_meal_status(&info->philo[i]) && !info->is_die)
-			{
-				mutex_print(&info->philo[i], "died");
-				pthread_mutex_lock(&info->should_die_m);
-				info->philo[i].should_die = true;
-				pthread_mutex_unlock(&info->should_die_m);
-			}
-			if (info->philo[i].should_die || info->finished)
-			{
-				d = 1;
-				pthread_mutex_lock(&info->is_die_m);
-				info->is_die = true;
-				pthread_mutex_unlock(&info->is_die_m);
-			}
-			// usleep(100);
-		}
-	}
-	return (NULL);
-}
-
-void	*__check_hunger(void *arg)
-{
-	t_philoinfo	*info;
-
-	info = arg;
-	while (!check_finished_status(info->philo))
-	{
-		if (info->all_ate == info->number_of_philos)
-		{
-			pthread_mutex_lock(&info->finished_m);
-			info->finished = true;
-			pthread_mutex_unlock(&info->finished_m);
-		}
+		i = 0;
+		d = helper_function(info);
 	}
 	return (NULL);
 }

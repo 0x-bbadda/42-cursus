@@ -6,7 +6,7 @@
 /*   By: bbadda <bbadda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:02:36 by bbadda            #+#    #+#             */
-/*   Updated: 2024/09/06 23:44:35 by bbadda           ###   ########.fr       */
+/*   Updated: 2024/09/07 12:25:26 by bbadda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@ void	*one_philo(void *info)
 	ph = (t_philoinfo *)info;
 	printf("%d %d %s\n", 0, 1, "is thinking");
 	printf("%d %d %s\n", 0, 1, "has taken a fork");
-	my_own_sleep(ph->time_to_die);
-	printf("%lu %d %s\n", ph->time_to_die, 1, "is died");
+	my_own_sleep(ph->philo, ph->time_to_die);
+	printf("%lu %d %s\n", ph->time_to_die, 1, "died");
 	return (NULL);
 }
 
@@ -32,6 +32,7 @@ void	__create_threads_and_philos(t_philoinfo *info)
 	info->start_time = get_msec_time();
 	if (info->number_of_philos == 1)
 	{
+		init_all_philos(info, i);
 		pthread_create(&info->philo[i].thread, NULL, one_philo, 
 			info);
 		return ;

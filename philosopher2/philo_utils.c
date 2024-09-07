@@ -6,7 +6,7 @@
 /*   By: bbadda <bbadda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 13:06:33 by bbadda            #+#    #+#             */
-/*   Updated: 2024/09/03 13:17:26 by bbadda           ###   ########.fr       */
+/*   Updated: 2024/09/07 09:42:08 by bbadda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,4 +66,20 @@ int	ft_atoi(const char *str)
 		str++;
 	}
 	return (r * s);
+}
+
+int	cmp(const char *s1, const char *s2)
+{
+	int	i;
+
+	i = 0;
+	if (__strlen(s1) != __strlen(s2))
+		return (0);
+	while (s1[i] && s2[i])
+	{
+		if (s1[i] != s2[i])
+			return (0);
+		i++;
+	}
+	return (1);
 }

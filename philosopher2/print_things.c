@@ -6,7 +6,7 @@
 /*   By: bbadda <bbadda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 13:08:52 by bbadda            #+#    #+#             */
-/*   Updated: 2024/09/06 23:49:19 by bbadda           ###   ########.fr       */
+/*   Updated: 2024/09/07 12:26:46 by bbadda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,7 @@ void	mutex_print(t_philo *philo, char *message)
 		pthread_mutex_lock(&philo->info->print_m);
 		printf("%lu %d %s\n", get_msec_time() - philo->info->start_time, 
 			philo->id, message);
-		if (strcmp(message, "died") != 0)
-			pthread_mutex_unlock(&philo->info->print_m);
+		pthread_mutex_unlock(&philo->info->print_m);
 		pthread_mutex_unlock(&philo->info->finished_m);
 	}
 	else

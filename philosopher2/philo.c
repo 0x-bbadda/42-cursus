@@ -6,7 +6,7 @@
 /*   By: bbadda <bbadda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 17:59:52 by bbadda            #+#    #+#             */
-/*   Updated: 2024/09/06 23:51:53 by bbadda           ###   ########.fr       */
+/*   Updated: 2024/09/07 12:43:27 by bbadda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,10 +42,7 @@ int	main(int ac, char *av[])
 	info = __calloc(1, sizeof(*info));
 	__init_args(info, av, ac);
 	if (__check_info(*info, ac))
-	{
-		free(info);
-		return (1);
-	}
+		return (free(info), 1);
 	info->philo = __calloc(info->number_of_philos, sizeof(t_philo));
 	info->forks = __calloc(info->number_of_philos, sizeof(pthread_mutex_t));
 	if (!info->philo || !info->forks)
